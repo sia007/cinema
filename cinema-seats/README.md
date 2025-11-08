@@ -1,7 +1,7 @@
-# Cinema Seats – React (Vite + Tailwind) – v3
+# Cinema Seats – React (Vite + Tailwind)
 
 Updates:
-- Tooltip appears **bottom-right** of the hovered seat with a soft fade-in (Ticketbooth style).
+- Tooltip appears **bottom-right** of the hovered seat with a soft fade-in
 - Seat selections persist when navigating back from Checkout to Seats.
 - Promo code `111` → 10% off (auto-updates as seats change).
 - USD formatting, localStorage per-movie bookings, success tick confirmation.
