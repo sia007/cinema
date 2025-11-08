@@ -128,28 +128,19 @@ function useHallBookings(hallId, movieId) {
   return { booked, isBooked, bookSeats };
 }
 
-function Row({ label, value, style }) {
+function Row({ label, value, className = "" }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, ...style }}>
-      <span style={{ color: "#ddd" }}>{label}</span>
-      <span style={{ color: "#fff", fontWeight: 600 }}>{value}</span>
+    <div className={`flex justify-between text-[14px] ${className}`}>
+      <span className="text-zinc-300">{label}</span>
+      <span className="text-white font-semibold">{value}</span>
     </div>
   );
 }
 
-function Legend({ color, label }) {
+function Legend({ colorClass, label }) {
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#aaa" }}>
-      <span
-        style={{
-          display: "inline-block",
-          width: 14,
-          height: 14,
-          borderRadius: 4,
-          background: color,
-          border: "1px solid #3a3a3a",
-        }}
-      />
+    <span className="inline-flex items-center gap-2 text-zinc-400">
+      <span className={`inline-block w-[14px] h-[14px] rounded border border-zinc-800 ${colorClass}`} />
       {label}
     </span>
   );
@@ -174,54 +165,27 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#000", color: "#fff" }}>
-      <header
-        style={{
-          borderBottom: "1px solid #262626",
-          padding: 16,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          position: "sticky",
-          top: 0,
-          background: "#000",
-          zIndex: 5,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 12,
-              background: "#b91c1c",
-              display: "grid",
-              placeItems: "center",
-              fontWeight: 800,
-            }}
-          >
-            CS
+    <div className="min-h-screen bg-black text-white">
+      <header className="sticky top-0 z-10 border-b border-zinc-800 bg-black px-4 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-red-700 font-extrabold">
+              CS
+            </div>
+            <h1 className="m-0 text-[18px]">Cinema Seats</h1>
           </div>
-          <h1 style={{ fontSize: 18, margin: 0 }}>Cinema Seats</h1>
+          {screen !== "home" && (
+            <button
+              onClick={goHome}
+              className="rounded-lg border border-zinc-800 px-3 py-1.5 text-sm text-zinc-300 hover:text-white"
+            >
+              Home
+            </button>
+          )}
         </div>
-        {screen !== "home" && (
-          <button
-            onClick={goHome}
-            style={{
-              background: "transparent",
-              color: "#d4d4d4",
-              border: "1px solid #333",
-              padding: "6px 10px",
-              borderRadius: 8,
-              cursor: "pointer",
-            }}
-          >
-            Home
-          </button>
-        )}
       </header>
 
-      <main style={{ padding: 16, maxWidth: 1200, margin: "0 auto" }}>
+      <main className="mx-auto max-w-6xl px-4 py-4">
         {screen === "home" && (
           <Home
             onPick={(id) => {
@@ -250,7 +214,7 @@ export default function App() {
             movie={movie}
             seats={selectedSeats}
             promo={appliedPromo}
-            onBack={() => setScreen("seats")} // keep selection when going back
+            onBack={() => setScreen("seats")}
             onConfirm={() => setScreen("confirmation")}
           />
         )}
@@ -260,17 +224,8 @@ export default function App() {
         )}
       </main>
 
-      <footer
-        style={{
-          borderTop: "1px solid #262626",
-          padding: 16,
-          textAlign: "center",
-          color: "#9ca3af",
-          fontSize: 12,
-          marginTop: 24,
-        }}
-      >
-        Demo only — no real payments. React + plain CSS.
+      <footer className="mt-6 border-t border-zinc-800 px-4 py-4 text-center text-xs text-zinc-400">
+        Demo only — no real payments. React + Tailwind CSS.
       </footer>
     </div>
   );
@@ -279,47 +234,28 @@ export default function App() {
 function Home({ onPick }) {
   return (
     <div>
-      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 12 }}>Now Showing</h2>
-      <div
-        style={{
-          display: "grid",
-          gap: 16,
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-        }}
-      >
+      <h2 className="mb-3 text-[22px] font-bold">Now Showing</h2>
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
         {MOVIES.map((m) => (
           <div
             key={m.id}
-            style={{
-              border: "1px solid #262626",
-              borderRadius: 16,
-              overflow: "hidden",
-              background: "#0a0a0a",
-            }}
+            className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950"
           >
-            <div style={{ aspectRatio: "3/4", overflow: "hidden" }}>
+            <div className="overflow-hidden [aspect-ratio:3/4]">
               <img
                 src={m.poster}
                 alt={m.title}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                className="block h-full w-full object-cover"
               />
             </div>
-            <div style={{ padding: 12 }}>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>{m.title}</div>
-              <div style={{ color: "#a1a1aa", fontSize: 12, marginBottom: 6 }}>{m.time}</div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ color: "#ddd", fontSize: 14 }}>{formatUSD(m.price)}</span>
+            <div className="p-3">
+              <div className="mb-1 font-bold">{m.title}</div>
+              <div className="mb-1 text-xs text-zinc-400">{m.time}</div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-zinc-200">{formatUSD(m.price)}</span>
                 <button
                   onClick={() => onPick(m.id)}
-                  style={{
-                    background: "#dc2626",
-                    color: "#fff",
-                    border: "none",
-                    padding: "8px 10px",
-                    borderRadius: 10,
-                    cursor: "pointer",
-                    fontSize: 13,
-                  }}
+                  className="rounded-xl bg-red-600 px-3 py-2 text-[13px] font-semibold text-white hover:bg-red-500"
                 >
                   Pick seats
                 </button>
@@ -386,12 +322,12 @@ function SeatPicker({ movie, selected, setSelected, onBack, onProceed }) {
               y: e.clientY + 20,
               html: (
                 <div>
-                  <div style={{ fontWeight: 700, color: "#fca5a5" }}>Seat {label}</div>
-                  <div style={{ color: "#e5e7eb" }}>
+                  <div className="font-bold text-rose-300">Seat {label}</div>
+                  <div className="text-zinc-200">
                     Row {alpha[r]}, Col {c + 1}
                   </div>
-                  <div style={{ color: "#fca5a5" }}>{formatUSD(movie.price)}</div>
-                  <div style={{ color: "#a1a1aa" }}>
+                  <div className="text-rose-300">{formatUSD(movie.price)}</div>
+                  <div className="text-zinc-400">
                     {booked ? "Occupied" : isSel ? "Selected" : "Available"}
                   </div>
                 </div>
@@ -405,135 +341,75 @@ function SeatPicker({ movie, selected, setSelected, onBack, onProceed }) {
               prev.includes(label) ? prev.filter((x) => x !== label) : [...prev, label]
             )
           }
-          style={{
-            margin: 4,
-            width: 36,
-            height: 36,
-            borderRadius: 6,
-            border: "1px solid " + (booked ? "#3a3a3a" : isSel ? "#ef4444" : "#3a3a3a"),
-            background: booked ? "#1a1a1a" : isSel ? "rgba(239,68,68,.15)" : "#1f1f1f",
-            color: booked ? "#6b7280" : isSel ? "#fecaca" : "#e5e7eb",
-            fontSize: 12,
-            cursor: booked ? "not-allowed" : "pointer",
-          }}
+          className={[
+            "m-1 h-9 w-9 rounded-md border text-xs transition",
+            booked
+              ? "cursor-not-allowed border-zinc-700 bg-zinc-900 text-zinc-400"
+              : isSel
+              ? "border-red-500 bg-red-500/15 text-rose-200 hover:bg-red-500/20"
+              : "border-zinc-700 bg-zinc-800 text-zinc-200 hover:bg-zinc-700",
+          ].join(" ")}
           title={label}
         >
           {label}
         </button>
       );
-      if (isAisle) rowBtns.push(<div key={`gap-${r}-${c}`} style={{ width: 12 }} />);
+      if (isAisle) rowBtns.push(<div key={`gap-${r}-${c}`} className="w-3" />);
     }
     seatRows.push(
-      <div key={r} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div key={r} className="flex items-center justify-center">
         {rowBtns}
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gap: 24,
-        gridTemplateColumns: "2fr 1fr",
-      }}
-    >
+    <div className="grid grid-cols-[2fr_1fr] gap-6">
       {/* Left: chart */}
       <div>
-        <button onClick={onBack} style={linkBtn}>
+        <button onClick={onBack} className="text-sm text-zinc-400 hover:text-white">
           ← Back
         </button>
-        <h2 style={{ fontSize: 22, fontWeight: 700, margin: "8px 0 16px" }}>Choose your seats</h2>
+        <h2 className="mb-4 mt-2 text-[22px] font-bold">Choose your seats</h2>
 
-        <div
-          style={{
-            position: "relative",
-            margin: "0 auto",
-            border: "1px solid #262626",
-            borderRadius: 14,
-            padding: 16,
-            background: "#0a0a0a",
-            width: "fit-content",
-          }}
-        >
-          <div style={{ textAlign: "center", color: "#a1a1aa", fontSize: 11, letterSpacing: 2 }}>
-            SCREEN
-          </div>
-          <div
-            style={{
-              height: 8,
-              background:
-                "linear-gradient(90deg, rgba(185,28,28,.7), rgba(239,68,68,.7), rgba(185,28,28,.7))",
-              borderRadius: 999,
-              margin: "8px 0 16px",
-            }}
-          />
+        <div className="relative mx-auto w-fit rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+          <div className="text-center text-[11px] tracking-[0.2em] text-zinc-400">SCREEN</div>
+          <div className="my-2 h-2 rounded-full bg-gradient-to-r from-red-700/70 via-red-500/70 to-red-700/70" />
           {seatRows}
         </div>
 
         {/* Tooltip */}
         {tip.visible && (
           <div
-            style={{
-              position: "fixed",
-              left: tip.x,
-              top: tip.y,
-              zIndex: 50,
-              background: "rgba(0,0,0,.95)",
-              color: "#fecaca",
-              border: "1px solid #7f1d1d",
-              padding: "8px 10px",
-              fontSize: 12,
-              borderRadius: 8,
-              boxShadow: "0 10px 30px rgba(0,0,0,.6)",
-              pointerEvents: "none",
-            }}
+            className="pointer-events-none fixed z-50 rounded-lg border border-red-900 bg-black/95 p-2 text-xs text-rose-300 shadow-2xl"
+            style={{ left: tip.x, top: tip.y }}
           >
             {tip.html}
           </div>
         )}
 
-        <div style={{ marginTop: 12, textAlign: "center", display: "flex", gap: 18, justifyContent: "center", color: "#a1a1aa", fontSize: 12 }}>
-          <Legend color="#1f1f1f" label="Available" />
-          <Legend color="rgba(239,68,68,.25)" label="Selected" />
-          <Legend color="#151515" label="Occupied" />
+        <div className="mt-3 flex justify-center gap-4 text-center text-xs text-zinc-400">
+          <Legend colorClass="bg-zinc-800" label="Available" />
+          <Legend colorClass="bg-red-500/25" label="Selected" />
+          <Legend colorClass="bg-zinc-900" label="Occupied" />
         </div>
       </div>
 
       {/* Right: sidebar */}
-      <aside
-        style={{
-          border: "1px solid #262626",
-          borderRadius: 16,
-          padding: 18,
-          background: "#0a0a0a",
-          minHeight: 200,
-        }}
-      >
-        <h3 style={{ margin: "0 0 12px", color: "#f87171" }}>Checkout</h3>
+      <aside className="min-h-[200px] rounded-2xl border border-zinc-800 bg-zinc-950 p-5">
+        <h3 className="mb-3 text-rose-400">Checkout</h3>
 
         {selected.length === 0 ? (
-          <p style={{ color: "#9ca3af", fontSize: 14 }}>No seats selected yet.</p>
+          <p className="text-sm text-zinc-400">No seats selected yet.</p>
         ) : (
           <>
-            <ul
-              style={{
-                border: "1px solid #262626",
-                borderRadius: 12,
-                overflow: "hidden",
-                margin: "0 0 12px",
-              }}
-            >
+            <ul className="mb-3 overflow-hidden rounded-xl border border-zinc-800">
               {selected.map((s, i) => (
                 <li
                   key={s}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "8px 12px",
-                    borderTop: i ? "1px solid #262626" : "none",
-                    fontSize: 14,
-                  }}
+                  className={`flex justify-between px-3 py-2 text-sm ${
+                    i ? "border-t border-zinc-800" : ""
+                  }`}
                 >
                   <span>Seat {s}</span>
                   <span>{formatUSD(movie.price)}</span>
@@ -542,8 +418,8 @@ function SeatPicker({ movie, selected, setSelected, onBack, onProceed }) {
             </ul>
 
             {/* Promo */}
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ display: "flex", gap: 8 }}>
+            <div className="mb-3">
+              <div className="flex gap-2">
                 <input
                   type="text"
                   value={promoCode}
@@ -552,40 +428,40 @@ function SeatPicker({ movie, selected, setSelected, onBack, onProceed }) {
                     setPromoStatus(null);
                   }}
                   placeholder={'Enter "111" to get discount'}
-                  style={input}
+                  className="flex-1 rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-500"
                 />
-                <button onClick={handleApplyPromo} style={outlineRedBtn}>
+                <button
+                  onClick={handleApplyPromo}
+                  className="rounded-xl border border-red-700 px-3 py-2 text-[13px] text-rose-200 hover:bg-red-900/20"
+                >
                   Apply
                 </button>
               </div>
               {promoStatus === "applied" && promo && (
-                <div style={{ color: "#22c55e", fontSize: 12, marginTop: 6 }}>
+                <div className="mt-1 text-xs text-green-500">
                   ✅ Promo applied: −{formatUSD(promo.amount)} (10%)
                 </div>
               )}
               {promoStatus === "invalid" && (
-                <div style={{ color: "#fca5a5", fontSize: 12, marginTop: 6 }}>
-                  ❌ Invalid code
-                </div>
+                <div className="mt-1 text-xs text-rose-300">❌ Invalid code</div>
               )}
             </div>
 
             <Row label="Subtotal" value={formatUSD(subtotal)} />
             <Row label="Booking fee (5%)" value={formatUSD(bookingFee)} />
             {promo && <Row label={`Promo (${promo.code})`} value={`- ${formatUSD(promoDisc)}`} />}
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-              <span style={{ color: "#eee" }}>Total</span>
-              <span style={{ fontWeight: 700 }}>{formatUSD(total)}</span>
+            <div className="mt-2 flex justify-between">
+              <span className="text-zinc-100">Total</span>
+              <span className="font-bold">{formatUSD(total)}</span>
             </div>
 
             <button
-            disabled={selected.length === 0}
-            onClick={() => onProceed(selected, promo)}
-            className="mt-3 w-full rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white hover:bg-red-500 disabled:bg-zinc-700"
-          >
-            Checkout →
-          </button>
-
+              disabled={selected.length === 0}
+              onClick={() => onProceed(selected, promo)}
+              className="mt-3 w-full rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white hover:bg-red-500 disabled:cursor-not-allowed disabled:bg-zinc-700"
+            >
+              Checkout →
+            </button>
           </>
         )}
       </aside>
@@ -643,38 +519,59 @@ function Checkout({ movie, seats, promo, onBack, onConfirm }) {
   };
 
   return (
-    <div style={{ display: "grid", gap: 24, gridTemplateColumns: "1.5fr 1fr" }}>
+    <div className="grid grid-cols-[1.5fr_1fr] gap-6">
       <div>
-        <button onClick={onBack} style={linkBtn}>← Back</button>
-        <h2 style={{ fontSize: 22, fontWeight: 700, margin: "8px 0 16px" }}>Checkout</h2>
+        <button onClick={onBack} className="text-sm text-zinc-400 hover:text-white">
+          ← Back
+        </button>
+        <h2 className="mb-4 mt-2 text-[22px] font-bold">Checkout</h2>
 
-        <div style={{ border: "1px solid #262626", borderRadius: 14, padding: 16, background: "#0a0a0a" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-            <h3 style={{ margin: 0, fontSize: 18 }}>Make it even better</h3>
-            <span style={{ color: "#9ca3af", fontSize: 12 }}>Snacks & merch (promo not applied)</span>
+        <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <h3 className="m-0 text-lg">Make it even better</h3>
+            <span className="text-xs text-zinc-400">Snacks & merch (promo not applied)</span>
           </div>
 
-          <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3">
             {ADDONS.map((a) => {
               const qty = addons[a.id] || 0;
               return (
-                <div key={a.id} style={{ display: "flex", gap: 12, border: "1px solid #303030", borderRadius: 12, padding: 12, background: "#0b0b0b" }}>
-                  <img src={a.img} alt={a.name} style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 10 }} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+                <div
+                  key={a.id}
+                  className="flex gap-3 rounded-xl border border-zinc-800 bg-zinc-950 p-3"
+                >
+                  <img
+                    src={a.img}
+                    alt={a.name}
+                    className="h-16 w-16 rounded-lg object-cover"
+                  />
+                  <div className="flex-1">
+                    <div className="flex justify-between gap-2">
                       <div>
-                        <div style={{ fontWeight: 600 }}>{a.name}</div>
-                        <div style={{ color: "#a1a1aa", fontSize: 12 }}>{a.note}</div>
+                        <div className="font-semibold">{a.name}</div>
+                        <div className="text-xs text-zinc-400">{a.note}</div>
                       </div>
-                      <div style={{ color: "#e5e7eb", fontSize: 14 }}>{formatUSD(a.price)}</div>
+                      <div className="text-sm text-zinc-200">{formatUSD(a.price)}</div>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-                      <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid #3a3a3a", borderRadius: 8 }}>
-                        <button onClick={() => incAddon(a.id, qty - 1)} style={qtyBtn}>−</button>
-                        <span style={{ width: 36, textAlign: "center" }}>{qty}</span>
-                        <button onClick={() => incAddon(a.id, qty + 1)} style={qtyBtn}>+</button>
+                    <div className="mt-2 flex justify-between">
+                      <div className="inline-flex items-center rounded-lg border border-zinc-700">
+                        <button
+                          onClick={() => incAddon(a.id, qty - 1)}
+                          className="rounded-lg px-3 py-1.5 text-base text-zinc-200 hover:bg-zinc-800"
+                        >
+                          −
+                        </button>
+                        <span className="w-9 text-center">{qty}</span>
+                        <button
+                          onClick={() => incAddon(a.id, qty + 1)}
+                          className="rounded-lg px-3 py-1.5 text-base text-zinc-200 hover:bg-zinc-800"
+                        >
+                          +
+                        </button>
                       </div>
-                      <div style={{ color: "#ddd" }}>{qty > 0 ? formatUSD(qty * a.price) : ""}</div>
+                      <div className="text-zinc-300">
+                        {qty > 0 ? formatUSD(qty * a.price) : ""}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -684,46 +581,46 @@ function Checkout({ movie, seats, promo, onBack, onConfirm }) {
         </div>
       </div>
 
-      {/* Right: Order Summary + Your Details (restored stack + button) */}
-      <aside style={{ border: "1px solid #262626", borderRadius: 16, padding: 18, background: "#0a0a0a" }}>
-        <h3 style={{ marginTop: 0, marginBottom: 12, fontSize: 18, color: "#fff" }}>Order Summary</h3>
+      {/* Right: Order Summary + Your Details (stacked) */}
+      <aside className="rounded-2xl border border-zinc-800 bg-zinc-950 p-5">
+        <h3 className="mb-3 mt-0 text-lg text-white">Order Summary</h3>
 
         <Row label="Tickets" value={formatUSD(ticketsSubtotal)} />
         <Row label="Booking fee (5%)" value={formatUSD(bookingFee)} />
         {promoDisc > 0 && <Row label="Promo" value={`- ${formatUSD(promoDisc)}`} />}
         <Row label="Add-ons" value={formatUSD(merchSubtotal)} />
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-          <span style={{ color: "#eee" }}>Total</span>
-          <span style={{ fontWeight: 700 }}>{formatUSD(total)}</span>
+        <div className="mt-2 flex justify-between">
+          <span className="text-zinc-100">Total</span>
+          <span className="font-bold">{formatUSD(total)}</span>
         </div>
 
-        <div style={{ marginTop: 20 }}>
-          <h4 style={{ margin: "0 0 8px", fontSize: 18 }}>Your Details</h4>
+        <div className="mt-5">
+          <h4 className="mb-2 text-lg">Your Details</h4>
 
-          <label style={{ display: "block", fontSize: 14, marginBottom: 6, color: "#e5e7eb" }}>
-            Full name
-          </label>
+          <label className="mb-1 block text-sm text-zinc-200">Full name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Alex Johnson"
-            style={{ ...input, width: "100%", marginBottom: 12, display: "block" }}
+            className="mb-3 block w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-500"
           />
 
-          <label style={{ display: "block", fontSize: 14, marginBottom: 6, color: "#e5e7eb" }}>
-            Email
-          </label>
+          <label className="mb-1 block text-sm text-zinc-200">Email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            style={{ ...input, width: "100%", marginBottom: 12, display: "block" }}
+            className="mb-3 block w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-500"
           />
 
-          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#d1d5db", marginBottom: 12 }}>
-            <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+          <label className="mb-3 flex items-center gap-2 text-sm text-zinc-300">
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+            />
             I understand this is a demo (no payment will be processed).
           </label>
         </div>
@@ -731,16 +628,7 @@ function Checkout({ movie, seats, promo, onBack, onConfirm }) {
         <button
           onClick={handlePlaceOrder}
           disabled={!name || !email || seats.length === 0 || !agree}
-          style={{
-            ...solidRedBtn,
-            width: "100%",
-            padding: "14px 16px",
-            borderRadius: 14,
-            fontSize: 15,
-            fontWeight: 700,
-            opacity: !name || !email || seats.length === 0 || !agree ? 0.6 : 1,
-            cursor: !name || !email || seats.length === 0 || !agree ? "not-allowed" : "pointer",
-          }}
+          className="w-full rounded-xl border border-red-600 bg-red-600 px-4 py-3 text-[15px] font-bold text-white hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
         >
           Place Order
         </button>
@@ -770,20 +658,9 @@ function Confirmation({ movie, seats, onHome }) {
     order?.total ?? Math.max(0, ticketsSubtotal + bookingFee - promoDisc + merchSubtotal);
 
   return (
-    <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center" }}>
-      <div
-        style={{
-          margin: "0 auto 16px",
-          width: 64,
-          height: 64,
-          borderRadius: "50%",
-          background: "rgba(22,163,74,.15)",
-          display: "grid",
-          placeItems: "center",
-          border: "1px solid rgba(22,163,74,.4)",
-        }}
-      >
-        <svg viewBox="0 0 24 24" width="36" height="36" style={{ color: "#22c55e" }}>
+    <div className="mx-auto max-w-xl text-center">
+      <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full border border-green-700/40 bg-green-600/15">
+        <svg viewBox="0 0 24 24" width="36" height="36" className="text-green-500">
           <path
             d="M20 7L9 18l-5-5"
             fill="none"
@@ -795,33 +672,22 @@ function Confirmation({ movie, seats, onHome }) {
         </svg>
       </div>
 
-      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>You're all set!</h2>
-      <p style={{ color: "#cbd5e1", fontSize: 14, marginBottom: 16 }}>
-        Your order is confirmed for <span style={{ color: "#fff" }}>{movie.title}</span>.
+      <h2 className="mb-2 text-[22px] font-bold">You're all set!</h2>
+      <p className="mb-4 text-sm text-slate-300">
+        Your order is confirmed for <span className="text-white">{movie.title}</span>.
       </p>
 
-      <div
-        style={{
-          border: "1px solid #262626",
-          borderRadius: 16,
-          padding: 16,
-          background: "#0a0a0a",
-          textAlign: "left",
-          margin: "0 auto 16px",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-          <span style={{ color: "#a1a1aa", fontSize: 14 }}>Order ID</span>
-          <span style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}>
-            {order?.id ?? "N/A"}
-          </span>
+      <div className="mx-auto mb-4 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 text-left">
+        <div className="mb-2 flex justify-between">
+          <span className="text-sm text-zinc-400">Order ID</span>
+          <span className="font-mono">{order?.id ?? "N/A"}</span>
         </div>
 
-        <div style={{ marginBottom: 8 }}>
-          <div style={{ color: "#a1a1aa", fontSize: 14, marginBottom: 4 }}>Seats</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <div className="mb-2">
+          <div className="mb-1 text-sm text-zinc-400">Seats</div>
+          <div className="flex flex-wrap gap-2">
             {storedSeats.map((s) => (
-              <span key={s} style={{ background: "#1f1f1f", padding: "4px 8px", borderRadius: 6 }}>
+              <span key={s} className="rounded-md bg-zinc-800 px-2 py-1">
                 {s}
               </span>
             ))}
@@ -829,11 +695,11 @@ function Confirmation({ movie, seats, onHome }) {
         </div>
 
         {addons.length > 0 && (
-          <div style={{ marginBottom: 8 }}>
-            <div style={{ color: "#a1a1aa", fontSize: 14, marginBottom: 4 }}>Add-ons</div>
-            <ul style={{ margin: 0, paddingLeft: 16 }}>
+          <div className="mb-2">
+            <div className="mb-1 text-sm text-zinc-400">Add-ons</div>
+            <ul className="list-inside list-disc">
               {addons.map((a) => (
-                <li key={a.id} style={{ display: "flex", justifyContent: "space-between" }}>
+                <li key={a.id} className="flex justify-between">
                   <span>
                     {a.name} × {a.qty}
                   </span>
@@ -844,72 +710,24 @@ function Confirmation({ movie, seats, onHome }) {
           </div>
         )}
 
-        <div style={{ marginTop: 8 }}>
+        <div className="mt-2">
           <Row label="Subtotal (tickets)" value={formatUSD(ticketsSubtotal)} />
           <Row label="Booking fee (5%)" value={formatUSD(bookingFee)} />
           {promoObj && <Row label={`Promo (${promoObj.code})`} value={`- ${formatUSD(promoDisc)}`} />}
           <Row label="Add-ons subtotal" value={formatUSD(merchSubtotal)} />
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-            <span style={{ color: "#eee" }}>Total</span>
-            <span style={{ fontWeight: 700 }}>{formatUSD(total)}</span>
+          <div className="mt-2 flex justify-between">
+            <span className="text-zinc-100">Total</span>
+            <span className="font-bold">{formatUSD(total)}</span>
           </div>
         </div>
       </div>
 
-      <button onClick={onHome} style={solidRedBtn}>
+      <button
+        onClick={onHome}
+        className="rounded-xl border border-red-600 bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-500"
+      >
         Back to Home
       </button>
     </div>
   );
 }
-
-const linkBtn = {
-  background: "transparent",
-  color: "#9ca3af",
-  border: "none",
-  padding: 0,
-  cursor: "pointer",
-  fontSize: 14,
-};
-
-const input = {
-  flex: 1,
-  background: "#0b0b0b",
-  color: "#fff",
-  border: "1px solid #3a3a3a",
-  padding: "8px 10px",
-  borderRadius: 10,
-  outline: "none",
-  fontSize: 14,
-};
-
-const outlineRedBtn = {
-  background: "transparent",
-  color: "#fecaca",
-  border: "1px solid #b91c1c",
-  padding: "8px 12px",
-  borderRadius: 10,
-  cursor: "pointer",
-  fontSize: 13,
-};
-
-const solidRedBtn = {
-  background: "#dc2626",
-  color: "#fff",
-  border: "1px solid #dc2626",
-  padding: "10px 14px",
-  borderRadius: 12,
-  cursor: "pointer",
-  fontSize: 14,
-  fontWeight: 700,
-};
-
-const qtyBtn = {
-  background: "transparent",
-  color: "#e5e7eb",
-  border: "none",
-  padding: "6px 10px",
-  borderRadius: 8,
-  cursor: "pointer",
-  fontSize: 16,
-};
